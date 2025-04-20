@@ -1,4 +1,3 @@
-import os
 import platform
 import mysql.connector
 import datetime
@@ -11,7 +10,7 @@ mydb=mysql.connector.connect(host="localhost",\
                              database="fashion")
 mycursor=mydb.cursor()
 print("="*97)
-print(" * * * * * * * * * * Welcome to the Project of Fashion Store management * * * * * * * * * * * * ")
+print(" * * * * * * * * * * Welcome to the Project of Inventory Management System * * * * * * * * * * * ")
 print("="*97)
 def AddProduct():
     print("")
@@ -135,61 +134,77 @@ def ViewProduct():
         print(tabulate(res,headers=h,tablefmt="psql"))
             
 def PurchaseProduct():
-    mn=""
-    dy=""
-    purchaseID="P"+str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-    L=[]
-    Lst=[]
+    """
+    Function to handle product purchase.
+    """
+    mn = ""
+    dy = ""
+    purchaseID = "P" + str(now.year) + str(now.month) + str(now.day) + str(now.hour) + str(now.minute) + str(now.second)
+    L = []
+    Lst = []
     L.append(purchaseID)
-    itemId=input("Enter Product ID : ")
+
+    # Input product details
+    itemId = input("Enter Product ID: ")
     L.append(itemId)
-    itemNo=int(input("Enter the number of Items : "))
+    itemNo = int(input("Enter the number of Items: "))
     L.append(itemNo)
-    sql="select rate from product where product_id=%s"
-    pid=(itemId,)
-    mycursor.execute(sql,pid)
-    res=mycursor.fetchone()
-    for x in res: 
-        print("rate is : ", x) 
-    amount=x*itemNo
-    print("Amount is :", amount)
+
+    # Fetch product rate
+    sql = "SELECT rate FROM product WHERE product_id = %s"
+    pid = (itemId,)
+    mycursor.execute(sql, pid)
+    res = mycursor.fetchone()
+
+    if not res:
+        print("Product ID not found!")
+        return
+
+    rate = res[0]  # Fetch the rate from the result tuple
+    print("Rate is:", rate)
+
+    # Calculate amount
+    amount = rate * itemNo
+    print("Amount is:", amount)
     L.append(amount)
-    mnth=now.month
-    if mnth<=9:
-        mn="0"+str(mnth)
-    else:
-        mn=str(mnth)
-    day=now.day
-    if day<=9:
-        dy="0"+str(day)        
-    else:
-        dy=str(day)
-        dt=str(now.year)+"-"+mn+"-"+dy
-        L.append(dt)
-        tp=(L)
-        sql="insert into purchase(purchase_id,item_id,no_of_items,amount,Purchase_date)values(%s,%s,%s,%s,%s)"
-        mycursor.execute(sql,tp)
-        mydb.commit()
-        sql="Select Instock from stock \
-            where item_id=%s"
-        mycursor.execute(sql,pid)
-        res=mycursor.fetchall()
-        status="No"
-        
-        for x in res:
-            print("No of items is: ",x[0])      
-        instock=x[0]+itemNo
-        if instock>0:
-            status="Yes"
-        Lst.append(instock)
-        Lst.append(status)
-        Lst.append(itemId)
-        tp=(Lst)
-        sql="update stock set instock=%s,status=%s \
-            where item_id=%s"
-        mycursor.execute(sql,tp)
-        mydb.commit()
-        print(itemNo,"Item purchased and saved in Database")
+
+    # Add purchase date
+    mnth = now.month
+    mn = "0" + str(mnth) if mnth <= 9 else str(mnth)
+    day = now.day
+    dy = "0" + str(day) if day <= 9 else str(day)
+    dt = str(now.year) + "-" + mn + "-" + dy
+    L.append(dt)
+
+    # Insert purchase record
+    tp = tuple(L)
+    sql = """INSERT INTO purchase (purchase_id, item_id, no_of_items, amount, Purchase_date)
+             VALUES (%s, %s, %s, %s, %s)"""
+    mycursor.execute(sql, tp)
+    mydb.commit()
+
+    # Update stock
+    sql = "SELECT Instock FROM stock WHERE item_id = %s"
+    mycursor.execute(sql, pid)
+    res = mycursor.fetchone()
+
+    if not res:
+        print("Stock record not found!")
+        return
+
+    instock = res[0] + itemNo
+    status = "Yes" if instock > 0 else "No"
+
+    Lst.append(instock)
+    Lst.append(status)
+    Lst.append(itemId)
+    tp = tuple(Lst)
+
+    sql = """UPDATE stock SET Instock = %s, status = %s WHERE item_id = %s"""
+    mycursor.execute(sql, tp)
+    mydb.commit()
+
+    print(f"{itemNo} item(s) purchased and saved in the database.")
 
 def ViewPurchase():
     item=input("Enter Product Name : ")
@@ -341,3 +356,4 @@ def runAgain():
         exit("Program Exiting..........")
         
 runAgain()
+
