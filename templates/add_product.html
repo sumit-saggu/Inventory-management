@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h2>Add Product</h2>
+    <form method="post">
+        <label>ID:</label><input name="product_id" required>
+        <label>Name:</label><input name="PName" required>
+        <label>Brand:</label><input name="brand" required>
+        <label>Gender:</label><input name="gender" required>
+        <label>Season:</label><input name="Season" required>
+        <label>Rate:</label><input name="rate" type="number" required>
+        <button type="submit">Add</button>
+    </form>
+    <a href="{{ url_for('view_products') }}" class="back-link">Back</a>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h2>Sales</h2>
+    <table>
+        <tr>
+            <th>ID</th><th>Name</th><th>Brand</th><th>No. Sold</th><th>Date</th><th>Amount</th>
+        </tr>
+        {% for s in sales %}
+        <tr>
+            <td>{{ s.product_id }}</td>
+            <td>{{ s.PName }}</td>
+            <td>{{ s.brand }}</td>
+            <td>{{ s.no_of_item_sold }}</td>
+            <td>{{ s.date_of_sale }}</td>
+            <td>{{ s.amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('index') }}" class="back-link">Back</a>
+    {% endblock %}
+</body>
+</html>

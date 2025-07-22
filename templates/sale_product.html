@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sale Product</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h2>Sale Product</h2>
+    <form method="post">
+        <label>Product ID:</label><input name="item_id" required>
+        <label>Number of Items:</label><input name="item_no" type="number" required>
+        <label>Discount (%):</label><input name="discount" type="number" value="0" required>
+        <button type="submit">Sale</button>
+    </form>
+    <a href="{{ url_for('index') }}" class="back-link">Back</a>
+    {% endblock %}
+</body>
+</html>

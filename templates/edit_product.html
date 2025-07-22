@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h2>Edit Product {{ product.product_id }}</h2>
+    <form method="post">
+        <label>Field to edit:</label>
+        <select name="field" required>
+            <option value="PName">Name</option>
+            <option value="brand">Brand</option>
+            <option value="gender">Gender</option>
+            <option value="Season">Season</option>
+            <option value="rate">Rate</option>
+        </select>
+        <label>New Value:</label><input name="value" required>
+        <button type="submit">Update</button>
+    </form>
+    <a href="{{ url_for('view_products') }}" class="back-link">Back</a>
+    {% endblock %}
+</body>
+</html>

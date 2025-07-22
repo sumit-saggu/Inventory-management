@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchases</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h2>Purchases</h2>
+    <table>
+        <tr>
+            <th>ID</th><th>Name</th><th>Brand</th><th>No. of Items</th><th>Date</th><th>Amount</th>
+        </tr>
+        {% for p in purchases %}
+        <tr>
+            <td>{{ p.product_id }}</td>
+            <td>{{ p.PName }}</td>
+            <td>{{ p.brand }}</td>
+            <td>{{ p.no_of_items }}</td>
+            <td>{{ p.Purchase_date }}</td>
+            <td>{{ p.amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('index') }}" class="back-link">Back</a>
+    {% endblock %}
+</body>
+</html>

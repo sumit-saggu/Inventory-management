@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase Product</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h2>Purchase Product</h2>
+    <form method="post">
+        <label>Product ID:</label><input name="item_id" required>
+        <label>Number of Items:</label><input name="item_no" type="number" required>
+        <button type="submit">Purchase</button>
+    </form>
+    <a href="{{ url_for('index') }}" class="back-link">Back</a>
+    {% endblock %}
+</body>
+</html>
